@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Api\Controller;
+use Illuminate\Http\Request;
 
 use App\Models\Leavetype;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LeavetypeController extends Controller
 {

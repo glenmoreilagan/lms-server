@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\Employee;
+use App\Http\Controllers\Api\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+
+use App\Models\Employee;
 
 class EmployeeController extends Controller
 {
