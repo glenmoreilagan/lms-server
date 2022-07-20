@@ -65,11 +65,8 @@ class LoginController extends Controller
     $request->user()->currentAccessToken()->delete();
 
     return response([
+      'status' => true,
       'message' => 'Logged Out'
     ], 201);
-  }
-
-  public function getdata() {
-    return auth()->user();
   }
 }

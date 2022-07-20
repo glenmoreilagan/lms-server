@@ -11,7 +11,6 @@ use App\Http\Controllers\Api\LoginController;
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/register', [LoginController::class, 'register'])->name('register');
-Route::post('/getdata', [LoginController::class, 'getdata'])->name('getdata');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::apiResource('employees', 'App\Http\Controllers\Api\EmployeeController');
