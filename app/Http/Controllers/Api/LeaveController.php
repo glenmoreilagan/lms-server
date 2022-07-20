@@ -102,4 +102,16 @@ class LeaveController extends Controller
 
     return $leave->delete();
   }
+
+  public function approveLeave(Request $request, $id)
+  {
+    $leave = Leave::where(['id' => $id])->update(['status' => 1]);
+
+    if(!$leave) 
+    {
+      return response()->json(['status' => false, 'message' => 'Approve Failed!']);
+    }
+
+    return response()->json(['status' => true, 'message' => 'Approve Success!']);
+  }
 }

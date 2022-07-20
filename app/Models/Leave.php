@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Leave extends Model
 {
   use HasFactory;
+  
   protected $table = 'tbl_leaves';
 
   public function employee()
