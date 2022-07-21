@@ -43,7 +43,12 @@ class LeavetypeController extends Controller
     $leavetype->leavetype = $request->leavetype;
     $leavetype->save();
 
-    return $leavetype;
+    if(!$leavetype) 
+    {
+      return response()->json(['status' => false, 'message' => 'Save Failed!']);
+    }
+
+    return response()->json(['status' => true, 'message' => 'Save Success!']);
   }
 
   /**
@@ -81,7 +86,12 @@ class LeavetypeController extends Controller
     $leavetype->leavetype = $request->leavetype;
     $leavetype->save();
 
-    return $leavetype;
+    if(!$leavetype) 
+    {
+      return response()->json(['status' => false, 'message' => 'Update Failed!']);
+    }
+
+    return response()->json(['status' => true, 'message' => 'Update Success!']);
   }
 
   /**
@@ -92,6 +102,13 @@ class LeavetypeController extends Controller
    */
   public function destroy(Leavetype $leavetype)
   {
-    return $leavetype->delete();
+    $leavetype->delete();
+
+    if(!$leavetype) 
+    {
+      return response()->json(['status' => false, 'message' => 'Delete Failed!']);
+    }
+
+    return response()->json(['status' => true, 'message' => 'Delete Success!']);
   }
 }

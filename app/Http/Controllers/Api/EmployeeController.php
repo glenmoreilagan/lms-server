@@ -46,7 +46,12 @@ class EmployeeController extends Controller
     $employee->phone = $request->phone;
     $employee->save();
 
-    return $employee;
+    if(!$employee) 
+    {
+      return response()->json(['status' => false, 'message' => 'Save Failed!']);
+    }
+
+    return response()->json(['status' => true, 'message' => 'Save Success!']);
   }
 
   /**
@@ -87,7 +92,12 @@ class EmployeeController extends Controller
     $employee->phone = $request->phone;
     $employee->save();
 
-    return $employee;
+    if(!$employee) 
+    {
+      return response()->json(['status' => false, 'message' => 'Update Failed!']);
+    }
+
+    return response()->json(['status' => true, 'message' => 'Update Success!']);
   }
 
   /**
@@ -98,6 +108,12 @@ class EmployeeController extends Controller
    */
   public function destroy(Employee $employee)
   {
-    return $employee->delete();
+    $delete = $employee->delete();
+
+    if(!$delete) 
+    {
+      return response()->json(['status' => false, 'message' => 'Delete Failed!']);
+    }
+    return response()->json(['status' => true, 'message' => 'Delete Success!']);
   }
 }

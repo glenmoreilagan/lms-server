@@ -43,7 +43,12 @@ class DepartmentController extends Controller
     $department->deptname = $request->deptname;
     $department->save();
 
-    return $department;
+    if(!$department) 
+    {
+      return response()->json(['status' => false, 'message' => 'Save Failed!']);
+    }
+
+    return response()->json(['status' => true, 'message' => 'Save Success!']);
   }
 
   /**
@@ -82,7 +87,12 @@ class DepartmentController extends Controller
     $department->deptname = $request->deptname;
     $department->save();
 
-    return $department;
+    if(!$department) 
+    {
+      return response()->json(['status' => false, 'message' => 'Update Failed!']);
+    }
+
+    return response()->json(['status' => true, 'message' => 'Update Success!']);
   }
 
   /**
@@ -93,6 +103,13 @@ class DepartmentController extends Controller
    */
   public function destroy(Department $department)
   {
-    return $department->delete();
+    $delete = $department->delete();
+
+    if(!$delete) 
+    {
+      return response()->json(['status' => false, 'message' => 'Delete Failed!']);
+    }
+
+    return response()->json(['status' => true, 'message' => 'Delete Success!']);
   }
 }

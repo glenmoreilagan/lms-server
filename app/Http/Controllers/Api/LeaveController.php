@@ -46,7 +46,12 @@ class LeaveController extends Controller
     $leave->reason = $request->reason;
     $leave->save();
 
-    return $leave;
+    if(!$leave) 
+    {
+      return response()->json(['status' => false, 'message' => 'Save Failed!']);
+    }
+
+    return response()->json(['status' => true, 'message' => 'Save Success!']);
   }
 
   /**
@@ -87,7 +92,12 @@ class LeaveController extends Controller
     $leave->reason = $request->reason;
     $leave->save();
 
-    return $leave;
+    if(!$leave) 
+    {
+      return response()->json(['status' => false, 'message' => 'Update Failed!']);
+    }
+
+    return response()->json(['status' => true, 'message' => 'Update Success!']);
   }
 
   /**
@@ -99,8 +109,14 @@ class LeaveController extends Controller
   public function destroy($id)
   {
     $leave = Leave::find($id);
+    $leave->delete();
 
-    return $leave->delete();
+    if(!$leave) 
+    {
+      return response()->json(['status' => false, 'message' => 'Delete Failed!']);
+    }
+
+    return response()->json(['status' => true, 'message' => 'Delete Success!']);
   }
 
   public function approveLeave(Request $request, $id)
