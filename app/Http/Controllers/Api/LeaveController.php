@@ -14,7 +14,7 @@ class LeaveController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index(Request $request)
   {
     return Leave::with(['leavetype', 'employee'])->get();
   }
@@ -39,7 +39,7 @@ class LeaveController extends Controller
   {
     $leave = new Leave();
     // $leave->emp_id = $request->emp_id; // change to logged employeeid
-    $leave->emp_id = rand(1,50); // change to logged employeeid
+    $leave->emp_id = $request->emp_id; // change to logged employeeid
     $leave->start_date = $request->start_date;
     $leave->end_date = $request->end_date;
     $leave->leavetype_id = $request->leavetype_id;
@@ -60,9 +60,9 @@ class LeaveController extends Controller
    * @param  \App\Models\Leave  $leave
    * @return \Illuminate\Http\Response
    */
-  public function show(Leave $leave)
+  public function show(Leave $leave, $id)
   {
-    return $leave;
+    return Leave::with(['leavetype'])->where(['tbl_leaves.id' => $id])->get();
   }
 
   /**
@@ -83,9 +83,10 @@ class LeaveController extends Controller
    * @param  \App\Models\Leave  $leave
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, Leave $leave)
+  public function update(Request $request, Leave $leave, $id)
   {
-    $leave->emp_id = $request->emp_id; // change to logged employeeid
+    $leave = Leave::find($id);
+    // $leave->emp_id = $request->emp_id; // change to logged employeeid
     $leave->start_date = $request->start_date;
     $leave->end_date = $request->end_date;
     $leave->leavetype_id = $request->leavetype_id;
@@ -129,5 +130,10 @@ class LeaveController extends Controller
     }
 
     return response()->json(['status' => true, 'message' => 'Approve Success!']);
+  }
+
+  public function myLeaves(Request $request, $e_id)
+  {
+    return Leave::with(['leavetype', 'employee'])->where(['tbl_leaves.emp_id' => $e_id])->get();
   }
 }

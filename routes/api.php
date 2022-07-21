@@ -19,6 +19,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
   Route::apiResource('leavetypes', 'App\Http\Controllers\Api\LeavetypeController');
   Route::apiResource('leaves', 'App\Http\Controllers\Api\LeaveController');
   Route::put('/leaves/approveLeave/{id}', [LeaveController::class, 'approveLeave'])->name('leave.approveLeave');
+  Route::get('/leaves/myLeaves/{e_id}', [LeaveController::class, 'myLeaves'])->name('leave.myLeaves');
 
   Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

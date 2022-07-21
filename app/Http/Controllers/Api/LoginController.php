@@ -52,9 +52,13 @@ class LoginController extends Controller
 
     $token = $user->createToken('myToken')->plainTextToken;
 
+    $role = '';
+    $role = $user->is_admin == 1 ? md5(1) : ($user->is_employee == 1 ? md5(2) : md5(0));
+
     return response([
       'status' => true,
       'user' => $user,
+      'role' => $role,
       'token' => $token,
     ], 201);
   }
