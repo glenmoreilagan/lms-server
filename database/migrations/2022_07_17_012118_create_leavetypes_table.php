@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('leavetype')->nullable();
             $table->string('leavedescription')->nullable();
-            $table->boolean('isinactive')->default(false);
+            $table->boolean('is_inactive')->default(0);
             $table->timestamps();
         });
     }

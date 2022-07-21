@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-
   public function register(Request $request)
   {
     $fields = $request->validate([
@@ -27,7 +26,7 @@ class LoginController extends Controller
       'password' => bcrypt($fields['password'])
     ]);
 
-    $token = $user->createToken('myToken')->plainTextToken;
+    $token = $user->createToken($user->name.'Token')->plainTextToken;
 
     return response([
       'user' => $user,

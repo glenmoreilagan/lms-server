@@ -18,7 +18,7 @@ return new class extends Migration
       $table->string('deptprefix')->nullable();
       $table->string('deptcode')->nullable();
       $table->string('deptname')->nullable();
-      $table->boolean('isinactive')->default(false);
+      $table->boolean('is_inactive')->default(false);
       $table->timestamps();
     });
   }

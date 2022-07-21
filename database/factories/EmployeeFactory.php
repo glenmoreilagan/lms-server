@@ -21,8 +21,9 @@ class EmployeeFactory extends Factory
       'empcode' => 'EM-'.Str::random(5),
       'empname' => fake()->name(),
       'address' => fake()->address(),
-      'image' => '',
-      'phone' => fake()->phoneNumber()
+      'phone' => fake()->phoneNumber(),
+      'email' => fake()->safeEmail(),
+      'image' => ''
     ];
   }
 }

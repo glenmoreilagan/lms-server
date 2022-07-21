@@ -24,8 +24,8 @@ return new class extends Migration
       $table->unsignedBigInteger('leavetype_id')->nullable();
       $table->unsignedBigInteger('emp_id')->nullable();
 
-      $table->foreign('leavetype_id')->references('id')->on('tbl_leavetypes')->onUpdate('cascade')->nullOnDelete();
-      $table->foreign('emp_id')->references('id')->on('tbl_employees')->onUpdate('cascade')->nullOnDelete();
+      $table->foreign('leavetype_id')->references('id')->on('tbl_leavetypes')->nullOnDelete();
+      $table->foreign('emp_id')->references('id')->on('tbl_employees')->nullOnDelete();
 
       $table->timestamps();
     });

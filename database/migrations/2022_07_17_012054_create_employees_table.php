@@ -19,8 +19,9 @@ return new class extends Migration
       $table->string('empname')->nullable();
       $table->string('address')->nullable();
       $table->string('phone')->nullable();
+      $table->string('email')->unique();
       $table->string('image')->nullable();
-      $table->boolean('isinactive')->default(false);
+      $table->boolean('is_inactive')->default(0);
       $table->timestamps();
     });
   }
