@@ -42,22 +42,31 @@ class EmployeeController extends Controller
     $fields = $request->validate([
       'empname' => 'required|string',
       'email' => 'required|string|unique:tbl_employees,email',
-      'password' => 'required|string|'
+      'password' => 'required|string|',
+      // 'file*' => '|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
     ]);
 
     $employee = new Employee();
-    $employee->empcode = 'EM-'.Str::random(5);
+    $employee->empcode = 'EM-' . Str::random(5);
     $employee->empname = $fields['empname'];
     $employee->address = $request->address;
     $employee->phone = $request->phone;
     $employee->email = $fields['email'];
-    $employee->image = $request->fileName;
+    // $employee->image = $request->fileName;
     $employee->save();
 
-    if(!$employee) 
-    {
+    if (!$employee) {
       return response()->json(['status' => false, 'message' => 'Save Failed!']);
     }
+
+      // $filename = time() . rand(1, 100) . '.' . $image->getClientOriginalExtension();
+      // $image->move('uploads/', $filename);
+
+    // $filenames = $request->fileName;
+    $file_path = $request->file('file')->store('employee_images');
+    $employee_update_image = Employee::find($employee->id);
+    $employee_update_image->image = $file_path;
+    $employee_update_image->save();
 
     $user = User::create([
       'emp_id' => $employee->id,
@@ -67,9 +76,8 @@ class EmployeeController extends Controller
       'is_employee' => 1,
     ]);
 
-    if($user)
-    {
-      $user->createToken($user->name.'Token')->plainTextToken;
+    if ($user) {
+      $user->createToken($user->name . 'Token')->plainTextToken;
     }
 
 
@@ -113,7 +121,7 @@ class EmployeeController extends Controller
       'password' => 'required|string|'
     ]);
 
-    $employee->empcode = 'EM-'.Str::random(5);
+    $employee->empcode = 'EM-' . Str::random(5);
     $employee->empname = $fields['empname'];
     $employee->address = $request->address;
     $employee->phone = $request->phone;
@@ -121,8 +129,7 @@ class EmployeeController extends Controller
     $employee->image = $request->fileName ? $request->fileName : '';
     $employee->save();
 
-    if(!$employee) 
-    {
+    if (!$employee) {
       return response()->json(['status' => false, 'message' => 'Update Failed!']);
     }
 
@@ -132,8 +139,7 @@ class EmployeeController extends Controller
     $user->password = bcrypt($fields['password']);
     $user->save();
 
-    if(!$user) 
-    {
+    if (!$user) {
       return response()->json(['status' => false, 'message' => 'Update Failed!']);
     }
 
@@ -150,8 +156,7 @@ class EmployeeController extends Controller
   {
     $delete = $employee->delete();
 
-    if(!$delete) 
-    {
+    if (!$delete) {
       return response()->json(['status' => false, 'message' => 'Delete Failed!']);
     }
     return response()->json(['status' => true, 'message' => 'Delete Success!']);

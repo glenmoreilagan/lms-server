@@ -69,8 +69,12 @@ return [
     |
     */
 
+    // 'links' => [
+    //     public_path('storage') => storage_path('app/public'),
+    // ],
+    
     'links' => [
-        public_path('storage') => storage_path('app/public'),
-    ],
+      public_path('employee_images') => storage_path('app/employee_images')
+    ]
 
 ];
