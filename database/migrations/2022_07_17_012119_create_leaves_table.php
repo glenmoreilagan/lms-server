@@ -20,6 +20,8 @@ return new class extends Migration
       $table->date('end_date')->nullable();
       $table->string('reason')->nullable();
       $table->boolean('status')->default(false);
+      $table->integer('approved_by')->default(0);
+      $table->dateTime('approved_at')->nullable();
 
       $table->unsignedBigInteger('leavetype_id')->nullable();
       $table->unsignedBigInteger('emp_id')->nullable();

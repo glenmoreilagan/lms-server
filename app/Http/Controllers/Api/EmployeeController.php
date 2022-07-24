@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 
 use App\Models\Employee;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class EmployeeController extends Controller
 {
@@ -18,7 +20,12 @@ class EmployeeController extends Controller
    */
   public function index(Request $request)
   {
-    return Employee::all();
+    $employee = DB::table('tbl_employees as emp')
+      ->join('tbl_departments as dept', 'dept.id', '=', 'emp.dept_id')
+      ->select(['emp.*', 'dept.deptcode', 'dept.deptname'])
+      ->get();
+
+    return $employee;
   }
 
   /**
@@ -52,21 +59,15 @@ class EmployeeController extends Controller
     $employee->address = $request->address;
     $employee->phone = $request->phone;
     $employee->email = $fields['email'];
+    $employee->dept_id = $request->dept_id;
     // $employee->image = $request->fileName;
     $employee->save();
+
+    $this->saveImage($employee->id, $request);
 
     if (!$employee) {
       return response()->json(['status' => false, 'message' => 'Save Failed!']);
     }
-
-      // $filename = time() . rand(1, 100) . '.' . $image->getClientOriginalExtension();
-      // $image->move('uploads/', $filename);
-
-    // $filenames = $request->fileName;
-    $file_path = $request->file('file')->store('employee_images');
-    $employee_update_image = Employee::find($employee->id);
-    $employee_update_image->image = $file_path;
-    $employee_update_image->save();
 
     $user = User::create([
       'emp_id' => $employee->id,
@@ -92,6 +93,12 @@ class EmployeeController extends Controller
    */
   public function show(Employee $employee)
   {
+    $employee = DB::table('tbl_employees as emp')
+      ->where(['emp.id' => $employee->id])
+      ->join('tbl_departments as dept', 'dept.id', '=', 'emp.dept_id')
+      ->select(['emp.*', 'dept.deptcode', 'dept.deptname'])
+      ->get();
+
     return $employee;
   }
 
@@ -118,7 +125,7 @@ class EmployeeController extends Controller
     $fields = $request->validate([
       'empname' => 'required|string',
       'email' => 'required|string|',
-      'password' => 'required|string|'
+      // 'password' => 'required|string|'
     ]);
 
     $employee->empcode = 'EM-' . Str::random(5);
@@ -126,18 +133,21 @@ class EmployeeController extends Controller
     $employee->address = $request->address;
     $employee->phone = $request->phone;
     $employee->email = $fields['email'];
-    $employee->image = $request->fileName ? $request->fileName : '';
+    $employee->dept_id = $request->dept_id;
     $employee->save();
+
+    $this->saveImage($employee->id, $request);
 
     if (!$employee) {
       return response()->json(['status' => false, 'message' => 'Update Failed!']);
     }
 
-    $user = User::find($employee->id);
-    $user->name = $fields['empname'];
-    $user->email = $fields['email'];
-    $user->password = bcrypt($fields['password']);
-    $user->save();
+    $user = User::where(['emp_id' => $employee->id])
+    ->update([
+      'name' => $fields['empname'],
+      'email' => $fields['email'],
+      // 'password' => bcrypt($fields['password']),
+    ]);
 
     if (!$user) {
       return response()->json(['status' => false, 'message' => 'Update Failed!']);
@@ -160,5 +170,20 @@ class EmployeeController extends Controller
       return response()->json(['status' => false, 'message' => 'Delete Failed!']);
     }
     return response()->json(['status' => true, 'message' => 'Delete Success!']);
+  }
+
+  public function saveImage($emp_id, $request)
+  {
+    $old_image = Employee::findOrFail($emp_id);
+    if($request->has('file') && !empty($request->file('file')))
+    {
+      // todo/to fix
+      // delete previous file/image and update new image
+      // File::delete($old_image->image);
+      $file_path = $request->file('file')->store('employee_images');
+      $employee_update_image = Employee::find($emp_id);
+      $employee_update_image->image = $file_path;
+      $employee_update_image->save();
+    }
   }
 }

@@ -122,7 +122,11 @@ class LeaveController extends Controller
 
   public function approveLeave(Request $request, $id)
   {
-    $leave = Leave::where(['id' => $id])->update(['status' => 1]);
+    $leave = Leave::where(['id' => $id])->update([
+      'status' => 1, 
+      'approved_by' => auth()->user()->id, 
+      'approved_at' => date('Y-m-d h:m:s')
+    ]);
 
     if(!$leave) 
     {
