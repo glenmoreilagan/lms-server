@@ -20,6 +20,7 @@ return new class extends Migration
       $table->string('address')->nullable();
       $table->string('phone')->nullable();
       $table->string('email')->unique();
+      $table->integer('dept_id')->default(0);
       $table->string('image')->nullable();
       $table->boolean('is_inactive')->default(0);
       $table->timestamps();
